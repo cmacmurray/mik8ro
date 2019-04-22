@@ -10,7 +10,7 @@ module "vpc" {
   cidr                 = "${var.vpc["vpc_cidr"]}"
   azs                  = ["us-east-1c", "us-east-1d", "us-east-1e"]
   private_subnets      = ["${var.network["private_subnets"]}"]
-  public_subnets       = ["${var.network["private_subnets"]}"]
+  public_subnets       = ["${var.network["public_subnets"]}"]
   enable_nat_gateway   = "${var.vpc["enable_nat_gateway"]}"
   enable_vpn_gateway   = "${var.vpc["enable_vpn_gateway"]}"
   tags = {

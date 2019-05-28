@@ -15,7 +15,7 @@ default = {
 }
 
 variable "vpc" {
-  default {  
+  default = {  
     vpc_name = "mik8ro"
     vpc_cidr = "10.0.0.0/16"
     enable_nat_gateway   = "true"
@@ -24,8 +24,8 @@ variable "vpc" {
 }
 
 variable "network" {
-  default {
-    trusted_cidr_blocks = ["144.121.193.178/32"] 
+  default = {
+    trusted_cidr_blocks = ["108.176.26.122/32"] 
     private_subnets     = ["10.0.1.0/24",
                            "10.0.2.0/24",
                            "10.0.3.0/24"]

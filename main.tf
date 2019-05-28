@@ -5,12 +5,13 @@ resource "aws_key_pair" "mik8ro" {
 
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
+  version = "v2.0"
 
   name                 = "${var.vpc["vpc_name"]}"
   cidr                 = "${var.vpc["vpc_cidr"]}"
   azs                  = ["us-east-1c", "us-east-1d", "us-east-1e"]
-  private_subnets      = ["${var.network["private_subnets"]}"]
-  public_subnets       = ["${var.network["public_subnets"]}"]
+  private_subnets     = "${var.network["private_subnets"]}"
+  public_subnets       = "${var.network["public_subnets"]}"
   enable_nat_gateway   = "${var.vpc["enable_nat_gateway"]}"
   enable_vpn_gateway   = "${var.vpc["enable_vpn_gateway"]}"
   tags = {
@@ -18,9 +19,11 @@ module "vpc" {
     Environment        = "${var.aws["environment"]}"
   }
 }
+
 output "vpc_id" {
   value = "${module.vpc.vpc_id}"
-  }
+}
+
 module "EKSControlPlaneSG" {
   source = "terraform-aws-modules/security-group/aws"
 
@@ -28,7 +31,7 @@ module "EKSControlPlaneSG" {
   description = "Security group for EKS control plane"
   vpc_id      = "${module.vpc.vpc_id}"
 
-  ingress_cidr_blocks      = ["${var.network["trusted_cidr_blocks"]}"]
+  ingress_cidr_blocks      = "${var.network["trusted_cidr_blocks"]}"
   ingress_with_cidr_blocks = [
     {
       from_port   = 443
@@ -43,7 +46,7 @@ module "EKSControlPlaneSG" {
       description = "EKSExternalControlPlaneSG"
       cidr_blocks = "${var.vpc["vpc_cidr"]}"
     }
-  ],
+  ]
   egress_cidr_blocks  = ["0.0.0.0/0"]
   egress_with_cidr_blocks = [
     {

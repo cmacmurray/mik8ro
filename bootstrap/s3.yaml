@@ -1,0 +1,36 @@
+---
+Resources:
+  S3StateBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      Tags:
+        - Key: "Name"
+          Value: "ChrisMacMurrayRemoteStateTestBucket"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
+      AccessControl: Private
+
+  StateBucketReadPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: "S3StateBucket"
+      PolicyDocument:
+        Statement:
+          -
+            Action:
+              - "s3:*"
+            Effect: "Allow"
+            Resource:
+              Fn::Join:
+                - ""
+                -
+                  - "arn:aws:s3:::"
+                  -
+                    Ref: "S3StateBucket"
+                  - "/*"
+            Principal: "*"
